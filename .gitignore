@@ -8,3 +8,5 @@ result/
 transformers-main/
 wandb/
 test.py
+wget-log
+dinov3_modelh/

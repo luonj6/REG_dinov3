@@ -142,69 +142,105 @@ def load_encoders(enc_type, device, resolution=256):
         #     encoder.head = torch.nn.Identity()
         #     encoder = encoder.to(device)
         #     encoder.eval()
+
+        #使用github项目来加载dinov3
         elif 'dinov3' in encoder_type:
-            from transformers import AutoModel  # 使用Hugging Face的AutoModel
-            import timm  # 用于pos_embed调整
-
-            # 映射model_config到DINOv3 ViT模型，假设model_config='b'对应vitb16
-            # model_name = "facebook/dinov3-vit{model_config}16-pretrain-lvd1689m"
-            # base_name = "dinov3-vit{model_config}16-pretrain-lvd1689m"
-            model_name = "facebook/dinov3-vitb16-pretrain-lvd1689m"
-            base_name = "dinov3-vitb16-pretrain-lvd1689m"
-
-            # 如果已用huggingface-cli login设置了token，可忽略hf_token
-            hf_token = "your huggingface access_token"
-
+            import timm
             if 'reg' in encoder_type:
                 try:
-                    # 如果模型已下载到本地
-                    encoder = AutoModel.from_pretrained(
-                        '/mnt/mydisk/zhangjunhao/REG/dinov3_models/dinov3-vitb16-pretrain-lvd1689m',
-                        torch_dtype=torch.float16,  # 低精度节省内存
-                        device_map="auto"  # 自动分配GPU/CPU
-                    )
+                    # encoder = torch.hub.load('your_path/.cache/torch/hub/facebookresearch_dinov2_main',
+                    #                         f'dinov2_vit{model_config}14_reg', source='local')
+                    encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main',
+                                            f'dinov3_vit{model_config}16_reg', source='local')
                 except:
-                    # 自动从Hugging Face下载
-                    encoder = AutoModel.from_pretrained(
-                        model_name,
-                        token=hf_token,
-                        torch_dtype=torch.float16,
-                        device_map="auto"
-                    )
+                    encoder = torch.hub.load('facebookresearch/dinov3', f'dinov3_vit{model_config}16_reg', weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
             else:
+                #  encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main',
+                #                              f'dinov3_vit{model_config}16', source='local',weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
                 try:
-                    # 如果模型已下载到本地
-                    encoder = AutoModel.from_pretrained(
-                        '/mnt/mydisk/zhangjunhao/REG/dinov3_models/dinov3-vitb16-pretrain-lvd1689m',
-                        torch_dtype=torch.float16,  # 低精度节省内存
-                        device_map="auto"  # 自动分配GPU/CPU
-                    )
+                    # encoder = torch.hub.load('your_path/.cache/torch/hub/facebookresearch_dinov2_main',
+                    #                          f'dinov2_vit{model_config}14', source='local')
+                    encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main',
+                                             f'dinov3_vit{model_config}16', source='local',weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
                 except:
-                    # 自动从Hugging Face下载
-                    encoder = AutoModel.from_pretrained(
-                        model_name,
-                        token=hf_token,
-                        torch_dtype=torch.float16,
-                        device_map="auto"
-                    )
-
+                    encoder = torch.hub.load('facebookresearch/dinov3', f'dinov3_vit{model_config}16', weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
+                    # encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main', f'dinov3_vit{model_config}16', weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
             print(f"Now you are using the {enc_name} as the aligning model")
-            # del encoder.head
+            del encoder.head
             patch_resolution = 16 * (resolution // 256)
-            # encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
-            #     encoder.pos_embed.data, [patch_resolution, patch_resolution],
-            # )
-
-            if hasattr(encoder, 'pos_embed'):
-                encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
+            encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
                 encoder.pos_embed.data, [patch_resolution, patch_resolution],
-                )
-            else:
-                print("DINOv3 uses RoPE, skipping pos_embed resampling.")
-
+            )
             encoder.head = torch.nn.Identity()
             encoder = encoder.to(device)
             encoder.eval()
+
+
+
+        # #使用huggingface从本地权重加载dinov3
+        # elif 'dinov3' in encoder_type:
+        #     from transformers import AutoModel  # 使用Hugging Face的AutoModel
+        #     import timm  # 用于pos_embed调整
+
+        #     # 映射model_config到DINOv3 ViT模型，假设model_config='b'对应vitb16
+        #     # model_name = "facebook/dinov3-vit{model_config}16-pretrain-lvd1689m"
+        #     # base_name = "dinov3-vit{model_config}16-pretrain-lvd1689m"
+        #     model_name = "facebook/dinov3-vitb16-pretrain-lvd1689m"
+        #     base_name = "dinov3-vitb16-pretrain-lvd1689m"
+
+        #     # 如果已用huggingface-cli login设置了token，可忽略hf_token
+        #     hf_token = "your huggingface access_token"
+
+        #     if 'reg' in encoder_type:
+        #         try:
+        #             # 如果模型已下载到本地
+        #             encoder = AutoModel.from_pretrained(
+        #                 '/mnt/mydisk/zhangjunhao/REG/dinov3_models/dinov3-vitb16-pretrain-lvd1689m',
+        #                 torch_dtype=torch.float16,  # 低精度节省内存
+        #                 device_map="auto"  # 自动分配GPU/CPU
+        #             )
+        #         except:
+        #             # 自动从Hugging Face下载
+        #             encoder = AutoModel.from_pretrained(
+        #                 model_name,
+        #                 token=hf_token,
+        #                 torch_dtype=torch.float16,
+        #                 device_map="auto"
+        #             )
+        #     else:
+        #         try:
+        #             # 如果模型已下载到本地
+        #             encoder = AutoModel.from_pretrained(
+        #                 '/mnt/mydisk/zhangjunhao/REG/dinov3_models/dinov3-vitb16-pretrain-lvd1689m',
+        #                 torch_dtype=torch.float16,  # 低精度节省内存
+        #                 device_map="auto"  # 自动分配GPU/CPU
+        #             )
+        #         except:
+        #             # 自动从Hugging Face下载
+        #             encoder = AutoModel.from_pretrained(
+        #                 model_name,
+        #                 token=hf_token,
+        #                 torch_dtype=torch.float16,
+        #                 device_map="auto"
+        #             )
+
+        #     print(f"Now you are using the {enc_name} as the aligning model")
+        #     # del encoder.head
+        #     patch_resolution = 16 * (resolution // 256)
+        #     # encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
+        #     #     encoder.pos_embed.data, [patch_resolution, patch_resolution],
+        #     # )
+
+        #     if hasattr(encoder, 'pos_embed'):
+        #         encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
+        #         encoder.pos_embed.data, [patch_resolution, patch_resolution],
+        #         )
+        #     else:
+        #         print("DINOv3 uses RoPE, skipping pos_embed resampling.")
+
+        #     encoder.head = torch.nn.Identity()
+        #     encoder = encoder.to(device)
+        #     encoder.eval()
 
 
 
