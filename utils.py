@@ -153,7 +153,7 @@ def load_encoders(enc_type, device, resolution=256):
             base_name = "dinov3-vitb16-pretrain-lvd1689m"
 
             # 如果已用huggingface-cli login设置了token，可忽略hf_token
-            
+            hf_token = "your huggingface access_token"
 
             if 'reg' in encoder_type:
                 try:
