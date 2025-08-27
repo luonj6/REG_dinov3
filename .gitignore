@@ -1,0 +1,10 @@
+
+__pycache__/
+.vscode/
+data/
+dinov3_models/
+REG_dinov3/
+result/
+transformers-main/
+wandb/
+test.py
