@@ -54,7 +54,7 @@ def preprocess_raw_image(x, enc_type):
     elif 'dinov3' in enc_type:
         x = x / 255.
         x = Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD)(x)
-        x = torch.nn.functional.interpolate(x, 224 * (resolution // 256), mode='bicubic')
+        x = torch.nn.functional.interpolate(x, 256 * (resolution // 256), mode='bicubic')    #这里要不要改？
         
     elif 'dinov1' in enc_type:
         x = x / 255.
@@ -170,11 +170,11 @@ def main(args):
         raise NotImplementedError()
     
     
-    for encoder, encoder_type, arch in zip(encoders, encoder_types, architectures):
-        if 'dinov3' in encoder_type:
-            z_dims = [768]
-        else:
-            z_dims = [encoder.embed_dim for encoder in encoders] if args.enc_type != 'None' else [0]
+    # for encoder, encoder_type, arch in zip(encoders, encoder_types, architectures):
+    #     if 'dinov3' in encoder_type:
+    #         z_dims = [768]
+    #     else:
+    #         z_dims = [encoder.embed_dim for encoder in encoders] if args.enc_type != 'None' else [0]
 
     # z_dims = []
     # for encoder, encoder_type, arch in zip(encoders, encoder_types, architectures):
@@ -187,7 +187,7 @@ def main(args):
     #     else:
     #         z_dims = [encoder.embed_dim for encoder in encoders] if args.enc_type != 'None' else [0]
 
-    # z_dims = [encoder.embed_dim for encoder in encoders] if args.enc_type != 'None' else [0]
+    z_dims = [encoder.embed_dim for encoder in encoders] if args.enc_type != 'None' else [0]
     block_kwargs = {"fused_attn": args.fused_attn, "qk_norm": args.qk_norm}
     model = SiT_models[args.model](
         input_size=latent_size,

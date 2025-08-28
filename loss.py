@@ -92,10 +92,10 @@ class SILoss:
         # projection loss
         proj_loss = 0.
         bsz = zs[0].shape[0]
-        for i, (z, z_tilde) in enumerate(zip(zs, zs_tilde)):
+        for i, (z, z_tilde) in enumerate(zip(zs, zs_tilde)):       #zs_tilde   torch.Size=[32,257,768]    zs  torch.Size=[32,197,768]
             for j, (z_j, z_tilde_j) in enumerate(zip(z, z_tilde)):
-                z_tilde_j = torch.nn.functional.normalize(z_tilde_j, dim=-1) 
-                z_j = torch.nn.functional.normalize(z_j, dim=-1) 
+                z_tilde_j = torch.nn.functional.normalize(z_tilde_j, dim=-1)  #torch.Size=[257,768]
+                z_j = torch.nn.functional.normalize(z_j, dim=-1)   #torch.Size=[197,768]
                 proj_loss += mean_flat(-(z_j * z_tilde_j).sum(dim=-1))
         proj_loss /= (len(zs) * bsz)
 

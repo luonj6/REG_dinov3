@@ -160,17 +160,34 @@ def load_encoders(enc_type, device, resolution=256):
                 try:
                     # encoder = torch.hub.load('your_path/.cache/torch/hub/facebookresearch_dinov2_main',
                     #                          f'dinov2_vit{model_config}14', source='local')
+                    # encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main',
+                    #                          f'dinov3_vit{model_config}16', source='local',weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
                     encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main',
-                                             f'dinov3_vit{model_config}16', source='local',weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
+                                             f'dinov3_vit{model_config}16', source='local',weights = "/mnt/mydisk/zhangjunhao/REG/dinov3_modelh/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth")
                 except:
-                    encoder = torch.hub.load('facebookresearch/dinov3', f'dinov3_vit{model_config}16', weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
+                    # encoder = torch.hub.load('facebookresearch/dinov3', f'dinov3_vit{model_config}16', weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
+                    encoder = torch.hub.load('facebookresearch/dinov3', f'dinov3_vit{model_config}16', weights ="/mnt/mydisk/zhangjunhao/REG/dinov3_modelh/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth")
                     # encoder = torch.hub.load('/home/zhangjunhao/.cache/torch/hub/facebookresearch_dinov3_main', f'dinov3_vit{model_config}16', weights = f"https://dinov3.llamameta.net/dinov3_vitb16/dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth?Policy=eyJTdGF0ZW1lbnQiOlt7InVuaXF1ZV9oYXNoIjoienI4bzBkbmowN28ycHpnZXdpZml3Zms5IiwiUmVzb3VyY2UiOiJodHRwczpcL1wvZGlub3YzLmxsYW1hbWV0YS5uZXRcLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3NTY0NTYxNTd9fX1dfQ__&Signature=bZH78U0fqnuLedfq7EsJjTzwNdGowmn1XWmKm3U2TnqCsudCEPcZPd54HVkzCFtg8KQJcBVHKb9-VQi%7E1i9rkk7UPp9loiGNxFHpqgSvTs15bXoBrUYwxC61Uzs50Z6AfRl85H6NO%7EVo%7ENZoylVPaj-WCxmasnyOVcX616kjkMnASZ4Qz825dqprfSEAMQIK0a8D7TTIgNTOzfRu4Mq1KkUVgCi3%7EGSoEHAhun83Qfp1Q1XzCfei4S8GUqtkyNrwYF2IinAhb2DmQgsOQcO-Jr2BeOFreoSWS1R2C8vZpOI%7EejdBwzCf5W-sGiOLDtyn%7EKbv5BO9XltazisQdAV3LQ__&Key-Pair-Id=K15QRJLYKIFSLZ&Download-Request-ID=631836603304588")
             print(f"Now you are using the {enc_name} as the aligning model")
             del encoder.head
             patch_resolution = 16 * (resolution // 256)
-            encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
+            
+            # encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
+            #     encoder.pos_embed.data, [patch_resolution, patch_resolution],
+            # )
+
+            # encoder.rope_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
+            #     encoder.rope_embed.data, [patch_resolution, patch_resolution],
+            # )
+
+
+            if hasattr(encoder, 'pos_embed'):
+                encoder.pos_embed.data = timm.layers.pos_embed.resample_abs_pos_embed(
                 encoder.pos_embed.data, [patch_resolution, patch_resolution],
-            )
+                )
+            else:
+                print("DINOv3 uses RoPE, skipping pos_embed resampling, auto aadjusting.")
+
             encoder.head = torch.nn.Identity()
             encoder = encoder.to(device)
             encoder.eval()
